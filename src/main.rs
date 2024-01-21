@@ -30,6 +30,8 @@ struct ReimannZetaArgs {
 	/// n of the range.
 	#[arg(value_parser)]
 	n: usize,
+	#[arg(short, long, default_value = "1")]
+	positions: usize,
 }
 
 fn main() {
@@ -62,6 +64,6 @@ fn reimann_zeta(args: ReimannZetaArgs) -> f64 {
 	for i in 1..=args.n {
 		sum += 1.0 / i as f64;
 	}
-	let top_one_value = 1.0 / sum;
-	top_one_value
+	let value = (1.0 / args.positions as f64) / sum;
+	value
 }
