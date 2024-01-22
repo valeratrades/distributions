@@ -83,7 +83,7 @@ fn std(args: StdArgs) -> String {
 
 	if args.to_convert < 20.0 {
 		let cp = n.cdf(args.to_convert) - n.cdf(-args.to_convert);
-		format!("{}%", cp * 100.0)
+		format!("{}%\n1/{}", cp * 100.0, (1.0 / (1.0 - cp)).round())
 	} else {
 		let z = n.inverse_cdf(1.0 - (100.0 - args.to_convert) / 200.0);
 		format!("{}", (z * 10.0).round() / 10.0)
