@@ -18,6 +18,7 @@ enum Commands {
 	/// Reimann Zeta calculator. Calculates expected value of 1 out of provided `n`.
 	#[command(alias = "rz")]
 	ReimannZeta(ReimannZetaArgs),
+	/// Chance of dying next year, based on birth year and gender (Currently only France).
 	#[command(alias = "dny")]
 	DieNextYearFrance(DieNextYearFranceArgs),
 }
