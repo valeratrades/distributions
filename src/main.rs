@@ -78,30 +78,28 @@ fn main() {
 	println!("{}", output);
 }
 
-fn std(args: StdArgs) -> f64 {
+fn std(args: StdArgs) -> String {
 	let n = Normal::new(0.0, 1.0).unwrap();
-	let converted: f64 = {
-		if args.to_convert < 20.0 {
-			let cp = n.cdf(args.to_convert) - n.cdf(-args.to_convert);
-			cp * 100.0
-		} else {
-			let z = n.inverse_cdf(1.0 - (100.0 - args.to_convert) / 200.0);
-			(z * 10.0).round() / 10.0
-		}
-	};
-	converted
+
+	if args.to_convert < 20.0 {
+		let cp = n.cdf(args.to_convert) - n.cdf(-args.to_convert);
+		format!("{}%", cp * 100.0)
+	} else {
+		let z = n.inverse_cdf(1.0 - (100.0 - args.to_convert) / 200.0);
+		format!("{}", (z * 10.0).round() / 10.0)
+	}
 }
 
-fn reimann_zeta(args: ReimannZetaArgs) -> f64 {
+fn reimann_zeta(args: ReimannZetaArgs) -> String {
 	let mut sum = 0.0;
 	for i in 1..=args.n {
 		sum += 1.0 / i as f64;
 	}
 	let value = (1.0 / args.positions as f64) / sum;
-	value
+	format!("{}%", value * 100.0)
 }
 
-fn die_next_year_france(args: DieNextYearFranceArgs) -> f64 {
+fn die_next_year_france(args: DieNextYearFranceArgs) -> String {
 	let birth_date = NaiveDate::from_ymd_opt(args.year as i32, 6, 15).unwrap();
 	let now = Utc::now();
 	let age = now.year() - birth_date.year() - if now.ordinal() < birth_date.ordinal() { 1 } else { 0 };
@@ -128,8 +126,9 @@ fn die_next_year_france(args: DieNextYearFranceArgs) -> f64 {
 		_ => (0.0, 0.0),
 	};
 
-	match args.gender {
+	let chance = match args.gender {
 		Gender::Male => male_rate as f64 / 1000.0,
 		Gender::Female => female_rate as f64 / 1000.0,
-	}
+	};
+	format!("{}%", chance * 100.0)
 }
