@@ -84,7 +84,7 @@ fn std(args: StdArgs) -> String {
 
 	if args.to_convert < 20.0 {
 		let cp = n.cdf(args.to_convert) - n.cdf(-args.to_convert);
-		format!("{}%\n1/{}", cp * 100.0, (0.5 / (1.0 - cp)).round()) // 0.5 because here we normally want to know what it takes to exit the curve from the upper bound.
+		format!("{}%\n1/{}", cp * 100.0, (2.0 / (1.0 - cp)).round()) // 0.5 because here we normally want to know what it takes to exit the curve from the upper bound.
 	} else {
 		let z = n.inverse_cdf(1.0 - (100.0 - args.to_convert) / 200.0);
 		format!("{}", (z * 10.0).round() / 10.0)
