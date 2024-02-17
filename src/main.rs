@@ -26,7 +26,7 @@ enum Commands {
 #[derive(Args)]
 struct StdArgs {
 	/// Value of the range.
-	/// if v < 20 : std_to_percent() : percent_to_std()
+	/// if v < 20 : std_to_percent() : v < 100 ? percent_to_std() : takes n for frequency_of_occurence := 1/n, then returns its std.
 	#[arg(value_parser)]
 	to_convert: f64,
 }
@@ -85,8 +85,11 @@ fn std(args: StdArgs) -> String {
 	if args.to_convert < 20.0 {
 		let cp = n.cdf(args.to_convert) - n.cdf(-args.to_convert);
 		format!("{}%\n1/{}", cp * 100.0, (2.0 / (1.0 - cp)).round()) // 0.5 because here we normally want to know what it takes to exit the curve from the upper bound.
-	} else {
+	} else if args.to_convert < 100.0 {
 		let z = n.inverse_cdf(1.0 - (100.0 - args.to_convert) / 200.0);
+		format!("{}", (z * 10.0).round() / 10.0)
+	} else {
+		let z = n.inverse_cdf(1.0 - 1.0 / args.to_convert);
 		format!("{}", (z * 10.0).round() / 10.0)
 	}
 }
