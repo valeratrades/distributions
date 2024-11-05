@@ -1,8 +1,7 @@
-use anyhow::{anyhow, Result};
-use chrono::prelude::*;
 use clap::{Args, Parser, Subcommand};
 use statrs::distribution::{ContinuousCDF, Normal};
-use std::str::FromStr;
+
+mod life_expectancy;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -20,7 +19,9 @@ enum Commands {
 	ReimannZeta(ReimannZetaArgs),
 	/// Chance of dying next year, based on birth year and gender (Currently only France).
 	#[command(alias = "dny")]
-	DieNextYearFrance(DieNextYearFranceArgs),
+	DieNextYearFrance(life_expectancy::LifeExpectancyArgs),
+	/// Approximate number of days you have left to live, following France's statistic
+	DaysLeft(life_expectancy::LifeExpectancyArgs),
 }
 
 #[derive(Args)]
@@ -40,40 +41,14 @@ struct ReimannZetaArgs {
 	positions: usize,
 }
 
-#[derive(Args)]
-struct DieNextYearFranceArgs {
-	/// Year of birth.
-	#[arg(value_parser)]
-	year: usize,
-	/// "male" or "female"
-	#[arg(short, long, default_value = "male")]
-	gender: Gender,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-enum Gender {
-	Male,
-	Female,
-}
-impl FromStr for Gender {
-	type Err = anyhow::Error;
-
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		match s.to_lowercase().as_str() {
-			"male" => Ok(Gender::Male),
-			"female" => Ok(Gender::Female),
-			_ => Err(anyhow!("Invalid gender")),
-		}
-	}
-}
-
 fn main() {
 	let cli = Cli::parse();
 
 	let output = match cli.command {
 		Commands::Std(args) => std(args),
 		Commands::ReimannZeta(args) => reimann_zeta(args),
-		Commands::DieNextYearFrance(args) => die_next_year_france(args),
+		Commands::DieNextYearFrance(args) => life_expectancy::die_next_year_france(args).expect("TODO: error type for age out of reasonable range").to_string(),
+		Commands::DaysLeft(args) => life_expectancy::days_left(args).expect("TODO: error type for age out of reasonable range").to_string(),
 	};
 
 	println!("{}", output);
@@ -101,38 +76,4 @@ fn reimann_zeta(args: ReimannZetaArgs) -> String {
 	}
 	let value = (1.0 / args.positions as f64) / sum;
 	format!("{}%", value * 100.0)
-}
-
-fn die_next_year_france(args: DieNextYearFranceArgs) -> String {
-	let birth_date = NaiveDate::from_ymd_opt(args.year as i32, 6, 15).unwrap();
-	let now = Utc::now();
-	let age = now.year() - birth_date.year() - if now.ordinal() < birth_date.ordinal() { 1 } else { 0 };
-
-	let (male_rate, female_rate) = match age {
-		0 => (3.3, 2.8),
-		1..=4 => (0.2, 0.2),
-		5..=9 => (0.1, 0.1),
-		10..=14 => (0.1, 0.1),
-		15..=19 => (0.3, 0.1),
-		20..=24 => (0.5, 0.2),
-		25..=29 => (0.7, 0.2),
-		30..=34 => (0.8, 0.3),
-		35..=39 => (1.1, 0.5),
-		40..=44 => (1.6, 0.8),
-		45..=49 => (2.7, 1.4),
-		50..=54 => (4.2, 2.3),
-		55..=59 => (6.7, 3.4),
-		60..=64 => (10.7, 5.0),
-		65..=69 => (15.6, 7.2),
-		70..=79 => (26.9, 13.6),
-		80..=89 => (79.6, 51.7),
-		90..=110 => (235.6, 185.9),
-		_ => (0.0, 0.0),
-	};
-
-	let chance = match args.gender {
-		Gender::Male => male_rate as f64 / 1000.0,
-		Gender::Female => female_rate as f64 / 1000.0,
-	};
-	format!("{}%", chance * 100.0)
 }
