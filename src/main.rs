@@ -1,6 +1,7 @@
 use clap::{Args, Parser, Subcommand};
 use statrs::distribution::{ContinuousCDF, Normal};
 
+mod kelly;
 mod life_expectancy;
 
 #[derive(Parser)]
@@ -22,6 +23,8 @@ enum Commands {
 	DieNextYearFrance(life_expectancy::LifeExpectancyArgs),
 	/// Approximate number of days you have left to live, following France's statistic
 	DaysLeft(life_expectancy::LifeExpectancyArgs),
+	/// Kelly criterion: optimal fraction of bankroll to bet
+	Kelly(kelly::KellyArgs),
 }
 
 #[derive(Args)]
@@ -49,6 +52,7 @@ fn main() {
 		Commands::ReimannZeta(args) => reimann_zeta(args),
 		Commands::DieNextYearFrance(args) => life_expectancy::die_next_year_france(args).expect("TODO: error type for age out of reasonable range").to_string(),
 		Commands::DaysLeft(args) => life_expectancy::days_left(args).expect("TODO: error type for age out of reasonable range").to_string(),
+		Commands::Kelly(args) => kelly::kelly(args),
 	};
 
 	println!("{}", output);

@@ -3,7 +3,7 @@ use std::str::FromStr;
 use chrono::prelude::*;
 use clap::Args;
 use color_eyre::eyre::{bail, Report, Result};
-use v_utils::io::Percent;
+use v_utils::Percent;
 
 #[derive(Args)]
 pub struct LifeExpectancyArgs {
