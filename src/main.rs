@@ -55,7 +55,7 @@ fn main() {
 		Commands::Kelly(args) => kelly::kelly(args),
 	};
 
-	println!("{}", output);
+	println!("{output}");
 }
 
 fn std(args: StdArgs) -> String {

@@ -56,28 +56,11 @@ impl LifeExpectancyArgs {
 	}
 }
 
-#[derive(Clone, Debug, PartialEq)]
-enum Gender {
-	Male,
-	Female,
-}
-impl FromStr for Gender {
-	type Err = Report;
-
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		match s.to_lowercase().as_str() {
-			"male" => Ok(Gender::Male),
-			"female" => Ok(Gender::Female),
-			_ => bail!("Invalid gender"),
-		}
-	}
-}
 pub fn die_next_year_france(args: LifeExpectancyArgs) -> Result<Percent> {
 	let rate = args.survival_rate_fr();
 	let percent: Percent = (rate / 1000.0).into();
 	Ok(percent)
 }
-
 pub fn expected_age_of_death(args: LifeExpectancyArgs) -> Result<f64> {
 	let current_age = args.age_now()?;
 	let mut age = current_age as f64;
@@ -100,7 +83,6 @@ pub fn expected_age_of_death(args: LifeExpectancyArgs) -> Result<f64> {
 		bail!("Failed to calculate expected age of death.")
 	}
 }
-
 pub fn days_left(args: LifeExpectancyArgs) -> Result<u32> {
 	let current_age = args.age_now()? as f64;
 	let expected_age_of_death = expected_age_of_death(args)?; // Use the previous function
@@ -111,5 +93,21 @@ pub fn days_left(args: LifeExpectancyArgs) -> Result<u32> {
 		let remaining_years = expected_age_of_death - current_age;
 		let remaining_days = (remaining_years * 365.25) as u32;
 		Ok(remaining_days)
+	}
+}
+#[derive(Clone, Debug, PartialEq)]
+enum Gender {
+	Male,
+	Female,
+}
+impl FromStr for Gender {
+	type Err = Report;
+
+	fn from_str(s: &str) -> Result<Self, Self::Err> {
+		match s.to_lowercase().as_str() {
+			"male" => Ok(Gender::Male),
+			"female" => Ok(Gender::Female),
+			_ => bail!("Invalid gender"),
+		}
 	}
 }
