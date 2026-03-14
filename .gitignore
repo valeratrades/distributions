@@ -5,9 +5,10 @@
 **/bin/
 **/*.test
 **/*.out
+**/*.db
 
 ## Personal
-**/_*
+**/_.*
 .local.sh
 [push]
 **/TODO.md
@@ -19,8 +20,9 @@ commit
 functions.sh
 
 ## Nix
-**/flake.lock
 result
+.direnv/
+.devenv/
 
 ## Vim
 *.sw[po]
@@ -53,7 +55,10 @@ venv/
 *.exe~
 *.dll
 
+## Web
+**/*.sass-cache/
 ## Rust
-.cargo/config.toml
-.cargo/config
 **/**.pending-snap
+### could be used for initial debugging of apps using `config` crate
+/config.toml
+**/rustc-ice*

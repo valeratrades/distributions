@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use chrono::prelude::*;
 use clap::Args;
-use color_eyre::eyre::{bail, Report, Result};
+use color_eyre::eyre::{Report, Result, bail};
 use v_utils::Percent;
 
 #[derive(Args)]
@@ -56,7 +56,7 @@ impl LifeExpectancyArgs {
 	}
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 enum Gender {
 	Male,
 	Female,
