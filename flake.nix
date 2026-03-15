@@ -50,9 +50,6 @@
 
                 cargoLock = {
                   lockFile = ./Cargo.lock;
-                  outputHashes = {
-                    "v_utils-2.15.30" = "sha256-zmVE9AF2lfzCFw/OaeH02HCWwNdj4+MvkuGznmc4nLs=";
-                  };
                 };
                 src = pkgs.lib.cleanSource ./.;
               };
