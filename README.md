@@ -5,6 +5,20 @@
 [<img alt="ci errors" src="https://img.shields.io/github/actions/workflow/status/valeratrades/distributions/errors.yml?branch=main&style=for-the-badge&style=flat-square&label=errors&labelColor=420d09" height="20">](https://github.com/valeratrades/distributions/actions?query=branch%3Amain) <!--NB: Won't find it if repo is private-->
 [<img alt="ci warnings" src="https://img.shields.io/github/actions/workflow/status/valeratrades/distributions/warnings.yml?branch=main&style=for-the-badge&style=flat-square&label=warnings&labelColor=d16002" height="20">](https://github.com/valeratrades/distributions/actions?query=branch%3Amain) <!--NB: Won't find it if repo is private-->
 
+TODO
+<!-- markdownlint-disable -->
+<details>
+<summary>
+<h2>Installation</h2>
+</summary>
+
+TODO
+
+</details>
+<!-- markdownlint-restore -->
+
+## Usage
+TODO
 
 
 
