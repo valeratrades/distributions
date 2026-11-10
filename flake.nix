@@ -21,6 +21,7 @@
           github = v_flakes.github {
             inherit pkgs pname rs;
             enable = true;
+            publishCachix = "valeratrades";
             lastSupportedVersion = "nightly-${v_flakes.rs.nightly_version}";
             jobs.default = true;
           };
@@ -37,8 +38,9 @@
         {
           packages =
             let
-              rustc = rust;
-              cargo = rust;
+              build_rust = v_flakes.rs.build_nightly system;
+              rustc = build_rust;
+              cargo = build_rust;
               rustPlatform = pkgs.makeRustPlatform {
                 inherit rustc cargo stdenv;
               };

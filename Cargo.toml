@@ -13,7 +13,12 @@ statrs = "0.18.0"
 v_utils = { version = "2.15.31", features = ["io"] }
 
 [lints.rust]
+stable_features = "allow"
 unused_features = "allow"
 
 [lints.cargo]
 non_kebab_case_bins = "allow"
+
+[lints.clippy]
+if_not_else = "warn"
+integer_division = "warn"
