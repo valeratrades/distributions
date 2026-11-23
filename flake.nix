@@ -18,17 +18,18 @@
           stdenv = pkgs.stdenvAdapters.useMoldLinker pkgs.stdenv;
 
           rs = v_flakes.rs { inherit pkgs rust; };
+          oldestSupportedVersion = "nightly-${v_flakes.rs.nightly_version}";
           github = v_flakes.github {
             inherit pkgs pname rs;
             enable = true;
             publishCachix = "valeratrades";
-            lastSupportedVersion = "nightly-${v_flakes.rs.nightly_version}";
+            inherit oldestSupportedVersion;
             jobs.default = true;
           };
           readme = v_flakes.readme-fw {
             inherit pkgs pname;
             defaults = true;
-            lastSupportedVersion = "nightly-1.92";
+            inherit oldestSupportedVersion;
             rootDir = ./.;
             badges = [ "msrv" "loc" "ci" ];
           };
